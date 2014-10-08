@@ -1,0 +1,39 @@
+.container {max-width: 800px; margin: 0 auto; overflow: auto;}
+
+body {font-family: 'Source Sans Pro'; font-size: 18px; background: #fff; color: #535353;  border: 10px #47CCFC solid; margin: 0px; padding: 20px 20px 100px 20px; overflow: auto; }
+hr {border: 2px solid #CCF4FF;}
+
+h1 {padding-bottom: 0; margin-bottom: 0}
+
+p a, a {color: #535353; text-decoration: none; padding-bottom: 0px; border-bottom: 2px #CCF4FF solid;}
+a:hover {color: #47CCFC;}
+a:active {color: #47CCFC;}
+
+/* Funsies */
+::selection {background: #44FFB4;}
+::-moz-selection {background: #44FFB4;}
+
+/* Table */
+table {border-spacing: 0;}
+tbody tr:nth-child(odd) {background-color: #f3f3f3;}
+thead {text-align: left; font-family: Source Sans Pro, Arial, sans-serif;}
+td {min-width: 140px; vertical-align: top; padding: 8px;}
+td a {line-height: 24px;}
+tr {height: 50px;}
+
+.tHeader {padding: 8px; cursor: pointer; text-align: left;}
+.tHeader::after {content: " \2193 \2191 "; font-size: 10px; padding-left: 3px; cursor: hand;}
+
+/* Graphs and stuffs */
+
+#stats-graph {padding-top: 30px;}
+text {font-size: 15px !important; }
+
+#intro {padding-top: 30px; padding-bottom: 30px; }
+#footer {margin-top: 80px; text-align: center}
+
+/* Pagination */
+#Pagination {border-top: 4px solid #CCF4FF; margin: 10px 0px; padding-top: 10px; display: inline-block;}
+#Pagination a {cursor: pointer;}
+.no-pag {color: #acacac; border: none;}
+.no-pag:hover {color: #acacac;}
