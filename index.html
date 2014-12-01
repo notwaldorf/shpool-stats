@@ -23,9 +23,10 @@
       I play below average pool every day. I often cheat. We are now keeping score.
     </div>
     <hr>
-    <div id="stats-graph"></div>
+    <div id="stats-pie"></div>
+    <div id="stats-line"></div>
     <p>Monica cheated: <b><span id="stats-cheating"></span>/<span id="stats-total"></b> times.</p>
-    <div id="stats-list"></div>
+    <div id="statsList"></div>
 
     <div id="footer">
       <hr>
@@ -35,12 +36,15 @@
     </div>
   </div>
 
-<script id="stats-list_template" type="text/html">
+<script id="statsList_template" type="text/html">
   <table>
-    <tr><th class="tHeader">Date</th>
-      <th class="tHeader">Winner</th><th class="tHeader">Was there cheating?</th></tr>
+    <tr>
+      <th class="tHeader" data-sorted="descending">Date</th>
+      <th class="tHeader">Winner</th>
+      <th class="tHeader">Was there cheating?</th>
+    </tr>
       {{#rows}}
-        <tr><td>{{timestamp}}</td><td>{{whowon}}</td><td>{{didmonicacheat}}</td></tr>
+        <tr><td>{{timestamp}}</td><td>{{winner}}</td><td>{{cheating}}</td></tr>
       {{/rows}}
   </table>
 </script>
@@ -48,42 +52,40 @@
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function() {
     var URL = "1fb-FdmS3snEMNAsK9sL5QZeHWjU9LjyEfB4m-psfW6I"
-    Tabletop.init( { key: URL, callback: makeItGo, simpleSheet: true } )
+    Tabletop.init( { key: URL, callback: makeItGo, orderby:'timestamp', simpleSheet: true } )
   })
 
   function makeItGo(data) {
     // Fix the timestamps because omg forms.
     data.forEach(function(entry) {
       var d = new Date(entry.timestamp);
-      entry.timestamp = (d.getMonth() + 1)+ "/" +
+      entry.timestamp = (d.getMonth() + 1) + "/" +
                         d.getDate() + "/" +
                         d.getFullYear();
     })
 
     // There is cheating in pool.
-    var cheating = Sheetsee.getOccurance(data, "didmonicacheat")
+    var cheating = Sheetsee.getOccurance(data, "cheating")
     $('#stats-cheating').text(cheating['Yes'])
     $('#stats-total').text(data.length)
 
-
     // Neat-o graph.
-    var hoomans = Sheetsee.getOccurance(data, "whowon")
+    var hoomans = Sheetsee.getOccurance(data, "winner")
     var colors = ['#47CCFC', '#ff4b7c']
     var hoomanData = Sheetsee.makeColorArrayOfObject(hoomans, colors)
 
-    var options = { units: "units",
-                    labels: "undefined",
-                    m: [0, 0, 0, 0],
-                    w: 300, h: 200,
-                    div: "#stats-graph",
-                    hiColor: "#E4EB29"
-                  }
-    Sheetsee.d3PieChart(hoomanData, options)
+    var pieOptions = { units: "units",
+                       labels: "undefined",
+                       m: [0, 0, 0, 0],
+                       w: 300, h: 200,
+                       div: "#stats-pie",
+                       hiColor: "#E4EB29" };
+    Sheetsee.d3PieChart(hoomanData, pieOptions)
 
     // Table.
     var tableOptions = { "data": data,
-                        "pagination": 10,
-                        "tableDiv": "#stats-list"
+                        "pagination": 100,
+                        "tableDiv": "#statsList"
                        }
     Sheetsee.makeTable(tableOptions)
   }
