@@ -24,7 +24,7 @@
     </div>
     <hr>
     <div id="stats-graph"></div>
-    <p> Monica cheated: <b><span id="stats-cheating"></span></b> times.</p>
+    <p>Monica cheated: <b><span id="stats-cheating"></span>/<span id="stats-total"></b> times.</p>
     <div id="stats-list"></div>
 
     <div id="footer">
@@ -63,6 +63,8 @@
     // There is cheating in pool.
     var cheating = Sheetsee.getOccurance(data, "didmonicacheat")
     $('#stats-cheating').text(cheating['Yes'])
+    $('#stats-total').text(data.length)
+
 
     // Neat-o graph.
     var hoomans = Sheetsee.getOccurance(data, "whowon")
