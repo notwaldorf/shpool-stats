@@ -39,12 +39,12 @@
 <script id="statsList_template" type="text/html">
   <table>
     <tr>
-      <th class="tHeader" data-sorted="descending">Date</th>
+      <th class="tHeader" data-sorted="ascending">Date</th>
       <th class="tHeader">Winner</th>
       <th class="tHeader">Was there cheating?</th>
     </tr>
       {{#rows}}
-        <tr><td>{{timestamp}}</td><td>{{winner}}</td><td>{{cheating}}</td></tr>
+        <tr><td>{{date}}</td><td>{{winner}}</td><td>{{wastherecheating}}</td></tr>
       {{/rows}}
   </table>
 </script>
@@ -52,20 +52,25 @@
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function() {
     var URL = "1fb-FdmS3snEMNAsK9sL5QZeHWjU9LjyEfB4m-psfW6I"
-    Tabletop.init( { key: URL, callback: makeItGo, orderby:'timestamp', simpleSheet: true } )
+    Tabletop.init(
+      { key: URL,
+        callback: makeItGo,
+        simpleSheet: true,
+        postProcess: function(element) {
+                      // Fix the timestamps because omg forms and omg dates.
+                      var d = new Date(element["timestamp"]);
+                      var month = d.getMonth() + 1;
+                      var day = d.getDate();
+                      element["date"] = d.getFullYear() + "-" +
+                                        (month < 10 ? "0" : "") + month + "-" +
+                                        (day < 10 ? "0" : "") + day;
+                    }
+      } );
   })
 
   function makeItGo(data) {
-    // Fix the timestamps because omg forms.
-    data.forEach(function(entry) {
-      var d = new Date(entry.timestamp);
-      entry.timestamp = (d.getMonth() + 1) + "/" +
-                        d.getDate() + "/" +
-                        d.getFullYear();
-    })
-
     // There is cheating in pool.
-    var cheating = Sheetsee.getOccurance(data, "cheating")
+    var cheating = Sheetsee.getOccurance(data, "wastherecheating")
     $('#stats-cheating').text(cheating['Yes'])
     $('#stats-total').text(data.length)
 
@@ -84,10 +89,13 @@
 
     // Table.
     var tableOptions = { "data": data,
-                        "pagination": 100,
+                        "pagination": 10,
                         "tableDiv": "#statsList"
                        }
-    Sheetsee.makeTable(tableOptions)
+    Sheetsee.makeTable(tableOptions);
+
+    // The table is sorted ascending by date, so give it a nudge to flip the sort.
+    $(".tHeader").click();
   }
 </script>
 
