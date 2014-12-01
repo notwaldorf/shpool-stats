@@ -55,8 +55,8 @@
     // Fix the timestamps because omg forms.
     data.forEach(function(entry) {
       var d = new Date(entry.timestamp);
-      entry.timestamp = d.getDate() + "/" +
-                        (d.getMonth() + 1) + "/" +
+      entry.timestamp = (d.getMonth() + 1)+ "/" +
+                        d.getDate() + "/" +
                         d.getFullYear();
     })
 
